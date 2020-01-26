@@ -29,6 +29,7 @@ static{
 }
   
     public void start(){
+        //Inicia la sesión
         try{
              this.session=telegramBotsApi.registerBot(this);
              
@@ -42,12 +43,19 @@ static{
     
     
     public String getBotToken() {
+        //Es el token que usa Telegram para autenticar que uno es el dueño del bot.
        return "1070859802:AAG3oyN8z1fZTAGSBqFjkLnCUFJ0ZDzKCjQ";
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-     
+     /*
+        Usando el patrón observador, el API dispara un evento de actualización
+        cada vez que el usuario envía un mensaje.Según el tipo, usa un objeto del
+        tipo SendMessage o SendPhoto(el api sirve para varios más, pero 
+        esos son los implementados aquí).
+        
+        */
        String messageStr=update.getMessage().getText();
        
        SendMessage message =new SendMessage();
@@ -88,6 +96,8 @@ static{
                msgType="stop";
        }
        
+       
+       //Obtiene el id del chat para saber a quien enviar el mensaje
        message.setChatId(update.getMessage().getChatId());
        photo.setChatId(update.getMessage().getChatId());
        
@@ -117,18 +127,7 @@ static{
        }
       
        
-       if(msgType.equalsIgnoreCase("stop")){
-           
-            try{
-                
-       sendMessage(message);
        
-       }catch(TelegramApiException e){
-           
-           e.printStackTrace();
-       }   
-            onClosing();
-       }
        
     }
 
